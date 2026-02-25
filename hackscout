@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hackathon Discovery Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>🚀 Hackathon Discovery Portal</h1>
+
+<input type="text" id="search" placeholder="Search hackathons..." />
+
+<div id="hackathonList"></div>
+
+<h2>🤖 AI Suggested Hackathons</h2>
+<div id="aiSuggestions"></div>
+
+<a href="add.html">➕ Add Hackathon</a>
+
+<script src="script.js"></script>
+</body>
+</html>
+body {
+  font-family: Arial;
+  padding: 20px;
+  background: #f4f4f4;
+}
+
+.hackathon {
+  background: white;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+button {
+  padding: 6px 10px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+let hackathons = [
+  {
+    name: "CodeSprint 2026",
+    location: "IIT Delhi",
+    date: "12–14 March 2026",
+    deadline: "5 March 2026",
+    domain: "AI"
+  },
+  {
+    name: "WebHack Fest",
+    location: "Online",
+    date: "20–21 Feb 2026",
+    deadline: "15 Feb 2026",
+    domain: "Web"
+  }
+];
+
+const listDiv = document.getElementById("hackathonList");
+
+function displayHackathons(data) {
+  listDiv.innerHTML = "";
+  data.forEach(h => {
+    listDiv.innerHTML += `
+      <div class="hackathon">
+        <h3>${h.name}</h3>
+        <p>📍 ${h.location}</p>
+        <p>📅 ${h.date}</p>
+        <p>⏰ Deadline: ${h.deadline}</p>
+        <p>🏷 ${h.domain}</p>
+        <button>Register</button>
+      </div>
+    `;
+  });
+}
+
+displayHackathons(hackathons);
+document.getElementById("search").addEventListener("input", function () {
+  const value = this.value.toLowerCase();
+  const filtered = hackathons.filter(h =>
+    h.name.toLowerCase().includes(value) ||
+    h.domain.toLowerCase().includes(value)
+  );
+  displayHackathons(filtered);
+});
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Hackathon</title>
+</head>
+<body>
+
+<h2>Add Hackathon</h2>
+
+<input id="name" placeholder="Hackathon Name"><br>
+<input id="location" placeholder="Location"><br>
+<input id="date" placeholder="Date"><br>
+<input id="deadline" placeholder="Deadline"><br>
+<input id="domain" placeholder="Domain"><br>
+
+<button onclick="addHackathon()">Submit</button>
+
+<script>
+function addHackathon() {
+  alert("Hackathon submitted! (Prototype mode)");
+}
+</script>
+
+</body>
+</html>
+const aiDiv = document.getElementById("aiSuggestions");
+
+hackathons
+  .filter(h => h.domain === "AI")
+  .slice(0, 1)
+  .forEach(h => {
+    aiDiv.innerHTML += `
+      <div class="hackathon">
+        <strong>Recommended:</strong> ${h.name}
+      </div>
+    `;
+  });
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
+});
+node index.js
+mongoose.connect("YOUR_MONGODB_URL")
+  .then(() => console.log("Database connected"))
+  .catch(err => console.log(err));
+const mongoose = require("mongoose");
+
+const HackathonSchema = new mongoose.Schema({
+  name: String,
+  location: String,
+  date: String,
+  deadline: String,
+  domain: String,
+  link: String
+});
+
+module.exports = mongoose.model("Hackathon", HackathonSchema);
+const Hackathon = require("./models/Hackathon");
+app.post("/add-hackathon", async (req, res) => {
+  const hackathon = new Hackathon(req.body);
+  await hackathon.save();
+  res.send({ message: "Hackathon added" });
+});
+app.get("/hackathons", async (req, res) => {
+  const data = await Hackathon.find();
+  res.json(data);
+});
+fetch("http://localhost:5000/hackathons")
+  .then(res => res.json())
+  .then(data => console.log(data));
+fetch("http://localhost:5000/add-hackathon", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(hackathonData)
+});
+app.get("/ai-suggestions", async (req, res) => {
+  const hacks = await Hackathon.find({ domain: "AI" });
+  res.json(hacks.slice(0, 3));
+});
+
